@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_row.view.*
 
 /**
@@ -16,6 +17,10 @@ class UserAdapter(val githubUsers: ArrayList<GithubUser>) : RecyclerView.Adapter
         holder?.itemView?.userLogin?.text = githubUser.name
         holder?.itemView?.userUrl?.text = githubUser.profileUrl
         holder?.itemView?.userScore?.text = githubUser.score
+        Picasso.get().load(githubUser.profilePic)
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.drawable.ic_action_name)
+                .into(holder?.itemView?.imageUser)
     }
 
     override fun getItemCount() = githubUsers.size

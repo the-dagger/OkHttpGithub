@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -28,7 +30,6 @@ public class JavaAdapter extends RecyclerView.Adapter<JavaAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
         GithubUser githubUser = githubUsers.get(position);
-
         holder.userName.setText(githubUser.getName());
         holder.userUrl.setText(githubUser.getProfileUrl());
         holder.userScore.setText(githubUser.getScore());
