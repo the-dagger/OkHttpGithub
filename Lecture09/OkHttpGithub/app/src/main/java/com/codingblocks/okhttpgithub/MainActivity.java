@@ -7,7 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -16,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeNetworkCall("https://www.google.com");
+                makeNetworkCall("https://api.github.com/search/users?q=harshit");
             }
         });
     }
@@ -42,15 +48,43 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String result = response.body().string();
+                final ArrayList<GithubUser> githubUsers = parseJson(result);
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView) findViewById(R.id.textView)).setText(result);
+
                     }
                 });
             }
         });
 
+    }
+
+    public ArrayList<GithubUser> parseJson(String s) {
+        //Parse the JSON
+        ArrayList<GithubUser> githubUserArrayList = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            JSONArray jsonArray = jsonObject.getJSONArray("items");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObj = jsonArray.getJSONObject(i);
+                String login = jsonObj.getString("login");
+                String url = jsonObj.getString("html_url");
+                String profile = jsonObj.getString("avatar_url");
+                String score = jsonObj.getString("score");
+
+                Log.e("TAG", "parseJson: " + login);
+
+                GithubUser githubUser = new GithubUser(login, url, profile, score);
+                githubUserArrayList.add(githubUser);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("TAG", "parseJson: " + githubUserArrayList.size());
+        return githubUserArrayList;
     }
 
 }
