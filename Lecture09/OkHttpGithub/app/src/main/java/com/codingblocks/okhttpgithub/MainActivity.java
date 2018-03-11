@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 makeNetworkCall("https://api.github.com/search/users?q=harshit");
             }
         });
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    UserAdapter userAdapter = new UserAdapter(githubUsers);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-                    recyclerView.setAdapter(userAdapter);
+                        UserAdapter userAdapter = new UserAdapter(githubUsers);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                        recyclerView.setAdapter(userAdapter);
                     }
                 });
             }
@@ -78,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 String login = jsonObj.getString("login");
-                String url = jsonObj.getString("html_url");
+                String htmlUrl = jsonObj.getString("html_url");
                 String profile = jsonObj.getString("avatar_url");
                 String score = jsonObj.getString("score");
-
+                String url = jsonObj.getString("url");
                 Log.e("TAG", "parseJson: " + login);
 
-                GithubUser githubUser = new GithubUser(login, url, profile, score);
+                GithubUser githubUser = new GithubUser(login, htmlUrl, profile, score, url);
                 githubUserArrayList.add(githubUser);
             }
 
