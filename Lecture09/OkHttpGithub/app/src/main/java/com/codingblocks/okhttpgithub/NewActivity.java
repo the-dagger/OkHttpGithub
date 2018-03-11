@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +57,7 @@ public class NewActivity extends AppCompatActivity {
                 NewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        userName.setText(githubUserDetail.getName());
+                        userName.setText(githubUserDetail.getLocation());
                         pb.setVisibility(View.GONE);
                         userName.setVisibility(View.VISIBLE);
                     }
@@ -66,15 +68,22 @@ public class NewActivity extends AppCompatActivity {
     }
 
     public GithubUserDetail parseJson(String s) {
-        GithubUserDetail githubUserDetail = null;
-        try {
-            JSONObject jsonObject = new JSONObject(s);
-            String name = jsonObject.getString("name");
-            githubUserDetail = new GithubUserDetail(name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        Gson gson = new Gson();
+        GithubUserDetail githubUserDetail = gson.fromJson(s, GithubUserDetail.class);
+
         return githubUserDetail;
+
+//        GithubUserDetail githubUserDetail = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(s);
+//            String name = jsonObject.getString("name");
+//            githubUserDetail = new GithubUserDetail(name);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return githubUserDetail;
+
     }
 
 
